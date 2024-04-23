@@ -14,7 +14,7 @@ export class UserController {
     private readonly findOneUserService: FindOneUserService,
     private readonly createAccountService: CreateAccountService,
   ) {}
-  logger = new Logger();
+  logger = new Logger(UserController.name);
 
   @Post('create')
   async createUser(@Body() createUserDto: CreateUserDto) {

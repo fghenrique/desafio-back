@@ -3,7 +3,6 @@ import { User } from '../user.entity';
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from '../dtos/create-user.dto';
 import { FindOneUserOptions } from '../interfaces/find-one-user-options.interface';
 import ApiError from '@/common/error/entities/api-error.entity';
 

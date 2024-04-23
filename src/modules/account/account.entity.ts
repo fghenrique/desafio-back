@@ -6,8 +6,10 @@ import {
   Entity,
   OneToOne,
   PrimaryGeneratedColumn,
+  OneToMany,
 } from 'typeorm';
 import { User } from '../user/user.entity';
+import { Transaction } from '../transactions/transaction.entity';
 
 @Entity('accounts')
 export class Account {
@@ -22,6 +24,9 @@ export class Account {
 
   @OneToOne(() => User, (user) => user.account)
   user: User;
+
+  @OneToMany(() => Transaction, (transaction) => transaction.account)
+  transactions: Transaction[];
 
   @CreateDateColumn({ select: false })
   created_at: Date;
