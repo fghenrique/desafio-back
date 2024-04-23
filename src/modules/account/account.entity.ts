@@ -21,11 +21,7 @@ export class Account {
   @Column({ type: 'float', default: 0 })
   bitcoin_balance: number;
 
-  @Column()
-  user_id: string;
-
   @OneToOne(() => User, (user) => user.account)
-  @JoinColumn({ name: 'user_id' })
   user: User;
 
   @CreateDateColumn({ select: false })

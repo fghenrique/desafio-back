@@ -7,7 +7,7 @@ import { UserRepository } from '../repositories/user.repository';
 export class CreateUserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
-    return await this.userRepository.create(createUserDto);
+  async createUser(createUserDto: User, password: string): Promise<User> {
+    return await this.userRepository.create(createUserDto, password);
   }
 }

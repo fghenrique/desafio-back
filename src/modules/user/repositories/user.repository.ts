@@ -13,10 +13,10 @@ export class UserRepository {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(user: CreateUserDto): Promise<User> {
+  async create(user: User, password: string): Promise<User> {
     await this.userRepository.save({
       ...user,
-      password_hash: bcrypt.hashSync(user.password, bcrypt.genSaltSync(10)),
+      password_hash: bcrypt.hashSync(password, bcrypt.genSaltSync(10)),
     });
     const dbUser = await this.findOne({ key: 'email', value: user.email });
     return dbUser;

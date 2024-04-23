@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -23,7 +24,11 @@ export class User {
   @Column({ select: false })
   password_hash: string;
 
+  @Column()
+  account_id: string;
+
   @OneToOne(() => Account, (account) => account.user)
+  @JoinColumn({ name: 'account_id' })
   account: Account;
 
   @CreateDateColumn({ select: false })

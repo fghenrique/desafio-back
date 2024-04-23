@@ -5,6 +5,7 @@ import { Account } from '@/modules/account/account.entity';
 import { CreateAccountService } from '@/modules/account/services/create-account.service';
 import { CreateUserService } from '../services/create-user.service';
 import { FindOneUserService } from '../services/find-one-user.service';
+import { User } from '../user.entity';
 
 @Controller('user')
 export class UserController {
@@ -25,22 +26,29 @@ export class UserController {
     if (emailAlreadyInUse)
       throw new ApiError('email-already-in-use', 'Email já está em uso', 400);
 
-    const user = await this.createUserService.createUser(createUserDto);
-    const userAccount = new Account();
+    const user = new User();
+    Object.assign(user, createUserDto);
 
-    userAccount.user = user;
-    userAccount.user_id = user.id;
-    const createdUserAccount =
-      await this.createAccountService.createAccount(userAccount);
+    const createdUserAccount = await this.createAccountService.createAccount(
+      new Account(),
+    );
+
+    user.account = createdUserAccount;
+    user.account_id = createdUserAccount.id;
+
+    const createdUser = await this.createUserService.createUser(
+      user,
+      createUserDto.password,
+    );
 
     this.logger.log(
-      `User ${user.id} created with email ${user.email}, it has the account id ${createdUserAccount.id}`,
+      `User ${createdUser.id} created with email ${createdUser.email}, it holds the account id ${createdUserAccount.id}`,
     );
 
     // here we return only the accountId inside account because it's the only info that make sense to be returned
     return {
       ok: true,
-      user: { ...user, account: { id: createdUserAccount.id } },
+      user: createdUser,
     };
   }
 }
