@@ -1,13 +1,30 @@
-import { Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { User } from '@/modules/user/user.entity';
+import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { AuthService } from '../services/auth.service';
+import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
 import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
-  @Post('login')
+  constructor(private readonly authService: AuthService) {}
+
+  @Post('authenticate')
   @UseGuards(AuthGuard('local'))
-  async login(@Req() req: Request) {}
+  async authenticate(@Req() req: Request) {
+    const user = req.user as User;
+    return this.authService.getLoginResponse(user);
+  }
 
   @Post('forgot-password')
-  async forgotPassword(@Req() req: Request) {}
+  async forgotPassword(@Body() forgotPasswordDto: { email: string }) {
+    await this.authService.forgotPassword(forgotPasswordDto.email);
+    return { ok: true };
+  }
+
+  @Post('verify-jwt')
+  @UseGuards(JwtAuthGuard)
+  async verifyGuard(@Req() req: Request) {
+    return { ok: true, user: req.user };
+  }
 }

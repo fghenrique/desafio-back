@@ -14,11 +14,12 @@ export class UserRepository {
   ) {}
 
   async create(user: CreateUserDto): Promise<User> {
-    const newUser = await this.userRepository.save({
+    await this.userRepository.save({
       ...user,
       password_hash: bcrypt.hashSync(user.password, bcrypt.genSaltSync(10)),
     });
-    return newUser;
+    const dbUser = await this.findOne({ key: 'email', value: user.email });
+    return dbUser;
   }
 
   async findOne(options: FindOneUserOptions): Promise<User> {
@@ -35,13 +36,6 @@ export class UserRepository {
     if (options.key && options.value)
       qb.where(`user.${options.key} = :value`, { value: options.value });
 
-    const user = await qb.getOne();
-    return user;
-  }
-
-  async findOneById(id: string): Promise<User> {
-    const qb = this.userRepository.createQueryBuilder('user');
-    qb.where('user.id = :id', { id });
     const user = await qb.getOne();
     return user;
   }
