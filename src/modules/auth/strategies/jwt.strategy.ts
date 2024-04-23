@@ -13,10 +13,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: User) {
+  async validate(payload: any) {
     const user: User = await this.findOneUserService.findOne({
       key: 'id',
       value: payload.id,
+      relations: ['account'],
     });
     return user;
   }

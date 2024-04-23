@@ -15,7 +15,6 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     if (!user) {
       throw new ApiError('invalid-credentials', 'Credenciais inválidas', 401);
     }
-
     return {
       id: user.id,
       name: user.name,
