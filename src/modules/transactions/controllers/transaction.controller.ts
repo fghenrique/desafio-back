@@ -22,6 +22,10 @@ export class TransactionController {
       user.account,
       value,
     );
+
+    this.logger.log(
+      `User ${user.id} made a deposit of R$${value} creating the transaction ${transaction.id}`,
+    );
     return { ok: true, transaction };
   }
 
@@ -36,6 +40,43 @@ export class TransactionController {
       value,
     );
 
+    this.logger.log(
+      `User ${user.id} made a withdraw of R$${value} creating the transaction ${transaction.id}`,
+    );
+    return { ok: true, transaction };
+  }
+
+  @Post('btc/buy')
+  @UseGuards(JwtAuthGuard)
+  async buyBtc(@Req() req: Request, @Body() { value }: ValueDto) {
+    const user = req.user as User;
+
+    const transaction = await this.createTransactionService.buyBtc(
+      user,
+      user.account,
+      value,
+    );
+
+    this.logger.log(
+      `User ${user.id} made a buy of ${value} BTC with R$${transaction.brl_amount} creating the transaction ${transaction.id}`,
+    );
+    return { ok: true, transaction };
+  }
+
+  @Post('btc/sell')
+  @UseGuards(JwtAuthGuard)
+  async sellBtc(@Req() req: Request, @Body() { value }: ValueDto) {
+    const user = req.user as User;
+
+    const transaction = await this.createTransactionService.sellBtc(
+      user,
+      user.account,
+      value,
+    );
+
+    this.logger.log(
+      `User ${user.id} made a sell of ${value} BTC earning R$${transaction.brl_amount} creating the transaction ${transaction.id}`,
+    );
     return { ok: true, transaction };
   }
 }

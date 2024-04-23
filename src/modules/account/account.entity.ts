@@ -17,10 +17,10 @@ export class Account {
   id: string;
 
   @Column({ type: 'float', default: 0 })
-  money_balance: number;
+  brl_balance: number;
 
   @Column({ type: 'float', default: 0 })
-  bitcoin_balance: number;
+  btc_balance: number;
 
   @OneToOne(() => User, (user) => user.account)
   user: User;

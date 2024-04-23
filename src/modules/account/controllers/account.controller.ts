@@ -12,7 +12,8 @@ export class AccountController {
   @UseGuards(JwtAuthGuard)
   async getBalance(@Req() req: Request) {
     const { account } = req.user as User;
-    return { ok: true, saldo: account.money_balance };
+    const { brl_balance, btc_balance } = account;
+    return { ok: true, brl_balance, btc_balance };
   }
 
   @Get('price')
