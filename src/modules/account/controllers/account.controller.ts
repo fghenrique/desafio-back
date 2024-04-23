@@ -1,9 +1,18 @@
 import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
-import { Body, Controller, Logger, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { DepositAccountService } from '../services/deposit-on-account.service';
 import { Request } from 'express';
 import { ValueDto } from '../dtos/value.dto';
 import { User } from '@/modules/user/user.entity';
+import { getBtcPrice } from '@/common/btc/get-price';
 
 @Controller('account')
 export class AccountController {
@@ -20,5 +29,19 @@ export class AccountController {
       valueDto.value,
     );
     return { ok: true, account: updatedAccount };
+  }
+
+  @Get('balance')
+  @UseGuards(JwtAuthGuard)
+  async getBalance(@Req() req: Request) {
+    const { account } = req.user as User;
+    return { ok: true, saldo: account.money_balance };
+  }
+
+  @Get('price')
+  @UseGuards(JwtAuthGuard)
+  async getPrice() {
+    const price = await getBtcPrice();
+    return { ok: true, price };
   }
 }
