@@ -4,6 +4,7 @@ import { config } from 'dotenv';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { ConfigModule } from '@nestjs/config';
+import { AccountModule } from './modules/account/account.module';
 config();
 
 @Module({
@@ -24,6 +25,7 @@ config();
     }),
     AuthModule,
     UserModule,
+    AccountModule,
   ],
 
   controllers: [],

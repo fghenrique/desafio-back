@@ -3,13 +3,15 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Account } from '../account/account.entity';
 
-@Entity('user')
+@Entity('users')
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
@@ -21,11 +23,8 @@ export class User {
   @Column({ select: false })
   password_hash: string;
 
-  @Column({ type: 'float', default: 0 })
-  money_balance: number;
-
-  @Column({ type: 'float', default: 0 })
-  bitcoin_balance: number;
+  @OneToOne(() => Account, (account) => account.user)
+  account: Account;
 
   @CreateDateColumn({ select: false })
   created_at: Date;

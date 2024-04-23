@@ -23,18 +23,18 @@ export class UserRepository {
   }
 
   async findOne(options: FindOneUserOptions): Promise<User> {
-    const qb = this.userRepository.createQueryBuilder('user');
+    const qb = this.userRepository.createQueryBuilder('users');
 
     if (options.relations) {
       options.relations.forEach((relation) => {
-        qb.leftJoinAndSelect(`user.${relation}`, relation);
+        qb.leftJoinAndSelect(`users.${relation}`, relation);
       });
     }
 
-    if (options.withPasswordHash) qb.addSelect('user.password_hash');
+    if (options.withPasswordHash) qb.addSelect('users.password_hash');
 
     if (options.key && options.value)
-      qb.where(`user.${options.key} = :value`, { value: options.value });
+      qb.where(`users.${options.key} = :value`, { value: options.value });
 
     const user = await qb.getOne();
     return user;

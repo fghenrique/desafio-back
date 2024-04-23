@@ -3,6 +3,7 @@ import { Strategy } from 'passport-local';
 import { AuthService } from '../services/auth.service';
 import { Injectable } from '@nestjs/common';
 import ApiError from '@/common/error/entities/api-error.entity';
+
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(private authService: AuthService) {

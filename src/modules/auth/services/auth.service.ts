@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@/modules/user/user.entity';
 import * as bcrypt from 'bcrypt';
-import { UserService } from '@/modules/user/services/user.service';
+import { FindOneUserService } from '@/modules/user/services/find-one-user.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
+    private readonly findOneUserService: FindOneUserService,
     private jwtService: JwtService,
   ) {}
 
@@ -15,7 +15,7 @@ export class AuthService {
     username: string,
     password: string,
   ): Promise<Partial<User>> {
-    const user = await this.userService.findOne({
+    const user = await this.findOneUserService.findOne({
       key: 'email',
       value: username,
       withPasswordHash: true,
