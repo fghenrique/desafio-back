@@ -1,9 +1,18 @@
-import { Body, Controller, Logger, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { CreateTransactionService } from '../services/create-transaction.service';
 import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
-import { ValueDto } from '@/modules/account/dtos/value.dto';
+import { ValueDto } from '@/common/dtos/value.dto';
 import { User } from '@/modules/user/user.entity';
 import { Request } from 'express';
+import { getBtcPrice } from '@/common/btc/get-price';
 
 @Controller('transaction')
 export class TransactionController {
@@ -78,5 +87,12 @@ export class TransactionController {
       `User ${user.id} made a sell of ${value} BTC earning R$${transaction.brl_amount} creating the transaction ${transaction.id}`,
     );
     return { ok: true, transaction };
+  }
+
+  @Get('btc/price')
+  @UseGuards(JwtAuthGuard)
+  async getPrice() {
+    const price = await getBtcPrice();
+    return { ok: true, price };
   }
 }

@@ -7,6 +7,7 @@ import { AccountController } from './controllers/account.controller';
 import { FindOneAccountService } from './services/find-one-account.service';
 import { UpdateAccountService } from './services/update-account.service';
 import { AccountMailService } from './services/mail/account-mail.service';
+import { GetAccountStatementService } from './services/get-account-statement.service';
 
 @Module({
   controllers: [AccountController],
@@ -17,6 +18,7 @@ import { AccountMailService } from './services/mail/account-mail.service';
     FindOneAccountService,
     UpdateAccountService,
     AccountMailService,
+    GetAccountStatementService,
   ],
   exports: [CreateAccountService, UpdateAccountService, AccountMailService],
 })

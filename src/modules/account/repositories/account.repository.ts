@@ -4,6 +4,8 @@ import { Account } from '../account.entity';
 import { Repository } from 'typeorm';
 import { FindOneAccountOptions } from '../interfaces/find-one-account-options.interface';
 import ApiError from '@/common/error/entities/api-error.entity';
+import { QueryStatementDto } from '../dtos/statement-query.dto';
+import moment from '@/common/libs/moment';
 
 @Injectable()
 export class AccountRepository {
@@ -28,6 +30,24 @@ export class AccountRepository {
 
     if (options.key && options.value)
       qb.where(`accounts.${options.key} = :value`, { value: options.value });
+
+    const account = await qb.getOne();
+    return account;
+  }
+
+  async getAccountStatement(
+    accountId: string,
+    options: QueryStatementDto,
+  ): Promise<Account> {
+    const { start_date, end_date } = options;
+
+    const qb = this.accountRepository.createQueryBuilder('accounts');
+    qb.leftJoinAndSelect('accounts.transactions', 'transactions');
+    qb.andWhere('accounts.id = :accountId', { accountId });
+    qb.andWhere('transactions.created_at BETWEEN :start_date AND :end_date', {
+      start_date,
+      end_date,
+    });
 
     const account = await qb.getOne();
     return account;
