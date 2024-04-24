@@ -10,5 +10,6 @@ import { TransactionController } from './controllers/transaction.controller';
   controllers: [TransactionController],
   imports: [AccountModule, TypeOrmModule.forFeature([Transaction])],
   providers: [CreateTransactionService, TransactionRepository],
+  exports: [TransactionRepository],
 })
 export class TransactionModule {}

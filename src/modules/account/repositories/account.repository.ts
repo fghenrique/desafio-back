@@ -57,8 +57,8 @@ export class AccountRepository {
     accountId: string,
     options: QueryTimeIntervalDto,
   ): Promise<{
-    btc_amount_buyed: number;
-    brl_amount_buyed: number;
+    btc_amount_bought: number;
+    brl_amount_bought: number;
     average_buy_price: number;
   }> {
     const { start_date, end_date } = options;
@@ -74,8 +74,8 @@ export class AccountRepository {
     qb.andWhere('accounts.id = :accountId', { accountId });
     qb.andWhere('transactions.type = :type', { type: TransactionType.BUY });
 
-    qb.select('SUM(transactions.btc_amount)', 'btc_amount_buyed');
-    qb.addSelect('SUM(transactions.brl_amount)', 'brl_amount_buyed');
+    qb.select('SUM(transactions.btc_amount)', 'btc_amount_bought');
+    qb.addSelect('SUM(transactions.brl_amount)', 'brl_amount_bought');
     qb.addSelect('AVG(transactions.btc_price_at_time)', 'average_buy_price');
 
     const res = await qb.getRawOne();
@@ -86,8 +86,8 @@ export class AccountRepository {
     accountId: string,
     options: QueryTimeIntervalDto,
   ): Promise<{
-    btc_amount_selled: number;
-    brl_amount_selled: number;
+    btc_amount_sold: number;
+    brl_amount_sold: number;
     average_sell_price: number;
   }> {
     const { start_date, end_date } = options;
@@ -103,8 +103,8 @@ export class AccountRepository {
     qb.andWhere('accounts.id = :accountId', { accountId });
     qb.andWhere('transactions.type = :type', { type: TransactionType.SELL });
 
-    qb.select('SUM(transactions.btc_amount)', 'btc_amount_selled');
-    qb.addSelect('SUM(transactions.brl_amount)', 'brl_amount_selled');
+    qb.select('SUM(transactions.btc_amount)', 'btc_amount_sold');
+    qb.addSelect('SUM(transactions.brl_amount)', 'brl_amount_sold');
     qb.addSelect('AVG(transactions.btc_price_at_time)', 'average_sell_price');
 
     const res = await qb.getRawOne();

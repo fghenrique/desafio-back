@@ -6,6 +6,7 @@ import { UserModule } from './modules/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { AccountModule } from './modules/account/account.module';
 import { TransactionModule } from './modules/transactions/transaction.module';
+import { MetricsModule } from './modules/metrics/metrics.module';
 config();
 
 @Module({
@@ -28,6 +29,7 @@ config();
     UserModule,
     AccountModule,
     TransactionModule,
+    MetricsModule,
   ],
 
   controllers: [],
