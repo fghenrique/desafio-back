@@ -1,73 +1,62 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Servindo a Aplicação Desafio-back em NestJS
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este guia fornece instruções sobre como servir a aplicação Desafio-back desenvolvida em NestJS. Você tem a opção de servir a aplicação em modo de desenvolvimento ou em modo de produção usando Docker Compose.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+### Pré-requisitos
 
-## Description
+Antes de começar, certifique-se de ter o seguinte:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Node.js instalado na sua máquina.
+- Yarn ou npm instalado na sua máquina.
+- Docker e Docker Compose instalados, se optar pelo modo de produção.
 
-## Installation
+### Modo de Desenvolvimento
 
-```bash
-$ yarn install
+Para servir a aplicação em modo de desenvolvimento, siga estas etapas:
+
+1. Certifique-se de ter um banco de dados PostgreSQL em execução. Você precisará preencher as seguintes variáveis de ambiente em um arquivo `.env`:
+
+   - `DB_HOST`: O endereço do banco de dados PostgreSQL.
+   - `DB_PORT`: A porta do banco de dados PostgreSQL.
+   - `DB_USERNAME`: O nome de usuário do banco de dados PostgreSQL.
+   - `DB_PASSWORD`: A senha do banco de dados PostgreSQL.
+   - `DB_DATABASE`: O nome do banco de dados PostgreSQL a ser utilizado.
+   - `REDIS_URL`: O endereço da instância do Redis
+   - `REDIS_PORT`: Porta da instância do Redis
+   - `MODE`: Define o modo de execução como, por padrão defina como `dev` para melhor funcionamento.
+   - `JWT_SECRET`: Uma chave secreta para assinar e verificar tokens JWT.
+   - `PORT`: A porta na qual o servidor será executado.
+   - `SENDGRID_DEPOSIT_EMAIL`: O id do template de email para enviar notificações de depósito via Sendgrid.
+   - `SENDGRID_WITHDRAW_EMAIL`: O id do template de email para enviar notificações de saque via Sendgrid.
+   - `SENDGRID_SELL_BTC_EMAIL`: O id do template de email para enviar notificações de venda de BTC via Sendgrid.
+   - `SENDGRID_BUY_BTC_EMAIL`: O id do template de email para enviar notificações de compra de BTC via Sendgrid.
+
+2. Certifique-se de ter uma instância Redis em execução.
+
+3. Execute o seguinte comando para iniciar a aplicação em modo de desenvolvimento:
+
+```
+yarn start:dev
 ```
 
-## Running the app
+### Modo de Produção
 
-```bash
-# development
-$ yarn run start
+Para servir a aplicação em modo de produção usando Docker Compose, siga estas etapas:
 
-# watch mode
-$ yarn run start:dev
+1. Certifique-se de ter o Docker e o Docker Compose instalados na sua máquina.
 
-# production mode
-$ yarn run start:prod
+2. Execute o seguinte comando para iniciar a aplicação em modo de produção:
+
+```
+docker compose up -d
 ```
 
-## Test
+### Atualização e Rebuild
 
-```bash
-# unit tests
-$ yarn run test
+Se você fizer alterações no código e desejar atualizar a aplicação em produção, execute o seguinte comando para rebuildar a aplicação:
 
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+```
+docker compose up -d --build
 ```
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+Com essas instruções, você deverá ser capaz de servir a aplicação Desafio-back em NestJS tanto em modo de desenvolvimento quanto em modo de produção.

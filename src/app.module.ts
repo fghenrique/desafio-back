@@ -26,8 +26,8 @@ config();
         type: 'redis',
         options: {
           socket: {
-            host: 'localhost',
-            port: 6379,
+            host: process.env.REDIS_URL,
+            port: process.env.REDIS_PORT,
           },
         },
         ignoreErrors: true,
