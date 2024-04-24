@@ -22,8 +22,16 @@ config();
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       synchronize: process.env.MODE === 'dev' ? true : false,
-      logging: false,
-      autoLoadEntities: true,
+      cache: {
+        type: 'redis',
+        options: {
+          socket: {
+            host: 'localhost',
+            port: 6379,
+          },
+        },
+        ignoreErrors: true,
+      },
     }),
     AuthModule,
     UserModule,
@@ -31,8 +39,5 @@ config();
     TransactionModule,
     MetricsModule,
   ],
-
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}

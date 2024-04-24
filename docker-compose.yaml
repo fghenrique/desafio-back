@@ -1,0 +1,38 @@
+services:
+  postgres:
+    image: ${DB_ENGINE:-postgres}:${DB_VERSION:-latest}
+    volumes:
+      - ./.docker/data/:/var/lib/postgresql
+    environment:
+      - POSTGRES_DB=${DB_DATABASE}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - ${DB_PORT}:5432
+    restart: always
+
+  redis:
+    image: redis
+    ports:
+      - '6379:6379'
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - SENDGRID_KEY=${SENDGRID_KEY}
+      - PORT=${PORT}
+      - SENDGRID_DEPOSIT_EMAIL=${SENDGRID_DEPOSIT_EMAIL}
+      - SENDGRID_WITHDRAW_EMAIL=${SENDGRID_WITHDRAW_EMAIL}
+      - SENDGRID_SELL_BTC_EMAIL=${SENDGRID_SELL_BTC_EMAIL}
+      - SENDGRID_BUY_BTC_EMAIL=${SENDGRID_BUY_BTC_EMAIL}
+
+    ports:
+      - ${PORT}:${PORT}

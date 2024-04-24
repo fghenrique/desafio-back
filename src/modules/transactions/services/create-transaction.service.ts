@@ -110,7 +110,7 @@ export class CreateTransactionService {
       email,
       'Compra de BTC por BRL!',
       { name, btcAmount, buyPrice, brlAmount: transaction.brl_amount },
-      process.env.SENDGRID_WITHDRAW_EMAIL,
+      process.env.SENDGRID_BUY_BTC_EMAIL,
     );
 
     return dbTransaction;
@@ -147,7 +147,7 @@ export class CreateTransactionService {
       email,
       'Venda de BTC por BRL!',
       { name, btcAmount, sellPrice, brlAmount: transaction.brl_amount },
-      process.env.SENDGRID_WITHDRAW_EMAIL,
+      process.env.SENDGRID_SELL_BTC_EMAIL,
     );
 
     return dbTransaction;
