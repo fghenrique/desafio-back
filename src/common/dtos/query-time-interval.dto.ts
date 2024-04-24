@@ -1,6 +1,6 @@
 import { IsDateString, IsOptional } from 'class-validator';
 
-export class QueryStatementDto {
+export class QueryTimeIntervalDto {
   @IsOptional()
   @IsDateString(
     { strict: true },

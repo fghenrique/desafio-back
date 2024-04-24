@@ -4,8 +4,8 @@ import { Account } from '../account.entity';
 import { Repository } from 'typeorm';
 import { FindOneAccountOptions } from '../interfaces/find-one-account-options.interface';
 import ApiError from '@/common/error/entities/api-error.entity';
-import { QueryStatementDto } from '../dtos/statement-query.dto';
-import moment from '@/common/libs/moment';
+import { TransactionType } from '@/modules/transactions/enums/transaction-type.enum';
+import { QueryTimeIntervalDto } from '@/common/dtos/query-time-interval.dto';
 
 @Injectable()
 export class AccountRepository {
@@ -37,7 +37,7 @@ export class AccountRepository {
 
   async getAccountStatement(
     accountId: string,
-    options: QueryStatementDto,
+    options: QueryTimeIntervalDto,
   ): Promise<Account> {
     const { start_date, end_date } = options;
 
@@ -51,6 +51,64 @@ export class AccountRepository {
 
     const account = await qb.getOne();
     return account;
+  }
+
+  async getAllBuyInfo(
+    accountId: string,
+    options: QueryTimeIntervalDto,
+  ): Promise<{
+    btc_amount_buyed: number;
+    brl_amount_buyed: number;
+    average_buy_price: number;
+  }> {
+    const { start_date, end_date } = options;
+
+    const qb = this.accountRepository.createQueryBuilder('accounts');
+    qb.leftJoinAndSelect('accounts.transactions', 'transactions');
+
+    qb.andWhere('transactions.created_at BETWEEN :start_date AND :end_date', {
+      start_date,
+      end_date,
+    });
+
+    qb.andWhere('accounts.id = :accountId', { accountId });
+    qb.andWhere('transactions.type = :type', { type: TransactionType.BUY });
+
+    qb.select('SUM(transactions.btc_amount)', 'btc_amount_buyed');
+    qb.addSelect('SUM(transactions.brl_amount)', 'brl_amount_buyed');
+    qb.addSelect('AVG(transactions.btc_price_at_time)', 'average_buy_price');
+
+    const res = await qb.getRawOne();
+    return res;
+  }
+
+  async getAllSellInfo(
+    accountId: string,
+    options: QueryTimeIntervalDto,
+  ): Promise<{
+    btc_amount_selled: number;
+    brl_amount_selled: number;
+    average_sell_price: number;
+  }> {
+    const { start_date, end_date } = options;
+
+    const qb = this.accountRepository.createQueryBuilder('accounts');
+    qb.leftJoinAndSelect('accounts.transactions', 'transactions');
+
+    qb.andWhere('transactions.created_at BETWEEN :start_date AND :end_date', {
+      start_date,
+      end_date,
+    });
+
+    qb.andWhere('accounts.id = :accountId', { accountId });
+    qb.andWhere('transactions.type = :type', { type: TransactionType.SELL });
+
+    qb.select('SUM(transactions.btc_amount)', 'btc_amount_selled');
+    qb.addSelect('SUM(transactions.brl_amount)', 'brl_amount_selled');
+    qb.addSelect('AVG(transactions.btc_price_at_time)', 'average_sell_price');
+
+    const res = await qb.getRawOne();
+    return res;
   }
 
   async updateAccount(id: string, data: Account) {
