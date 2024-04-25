@@ -1,5 +1,6 @@
 services:
   postgres:
+    container_name: 'postgres'
     image: ${DB_ENGINE:-postgres}:${DB_VERSION:-latest}
     volumes:
       - ./.docker/data/:/var/lib/postgresql
@@ -12,6 +13,7 @@ services:
     restart: always
 
   redis:
+    container_name: 'redis'
     image: redis
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}

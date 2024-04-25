@@ -11,4 +11,4 @@ EXPOSE 1337
 
 ENV MODE=production
 
-CMD yarn migration:run && node --max_old_space_size=450 dist/main.js
+CMD node --max_old_space_size=450 dist/main.js
