@@ -30,7 +30,6 @@ config();
             port: process.env.REDIS_PORT,
           },
         },
-        ignoreErrors: true,
       },
     }),
     AuthModule,
