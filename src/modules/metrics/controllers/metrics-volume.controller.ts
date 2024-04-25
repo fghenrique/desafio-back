@@ -3,7 +3,7 @@ import { Controller, Get, UseGuards } from '@nestjs/common';
 import { GetMetricsVolumeService } from '../services/get-metrics-volume.service';
 
 @Controller('metrics')
-export class MetricsController {
+export class MetricsVolumeController {
   constructor(
     private readonly getMetricsVolumeService: GetMetricsVolumeService,
   ) {}

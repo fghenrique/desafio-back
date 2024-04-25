@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { MetricsController } from './controllers/metrics.controller';
 import { TransactionModule } from '../transactions/transaction.module';
 import { GetMetricsVolumeService } from './services/get-metrics-volume.service';
+import { MetricsVolumeController } from './controllers/metrics-volume.controller';
 
 @Module({
-  controllers: [MetricsController],
+  controllers: [MetricsVolumeController],
   imports: [TransactionModule],
   providers: [GetMetricsVolumeService],
 })
