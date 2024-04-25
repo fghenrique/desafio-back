@@ -11,10 +11,10 @@ export class GetAccountStatementService {
     accountId: string,
     options: QueryTimeIntervalDto,
   ): Promise<Transaction[]> {
-    const { transactions } = await this.accountRepository.getAccountStatement(
+    const account = await this.accountRepository.getAccountStatement(
       accountId,
       options,
     );
-    return transactions;
+    return account?.transactions ?? [];
   }
 }

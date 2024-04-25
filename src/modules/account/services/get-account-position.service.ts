@@ -22,10 +22,14 @@ export class GetAccountPositionService {
     const buyPrice = buyInfo.average_buy_price;
 
     const percentual_profit_on_current_price =
-      (((Number(crrPrice) - buyPrice) / buyPrice) * 100).toFixed(2) + '%';
+      buyPrice != 0
+        ? (((Number(crrPrice) - buyPrice) / buyPrice) * 100).toFixed(2) + '%'
+        : '0%';
 
     const percentual_profit_on_avg_sell_price =
-      (((sellPrice - buyPrice) / buyPrice) * 100).toFixed(2) + '%';
+      buyPrice != 0 && sellPrice != 0
+        ? (((sellPrice - buyPrice) / buyPrice) * 100 ?? 0).toFixed(2) + '%'
+        : '0%';
 
     return {
       ...sellInfo,

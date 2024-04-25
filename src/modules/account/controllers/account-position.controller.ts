@@ -23,7 +23,7 @@ export class AccountPositionController {
       end_date = moment().format('YYYY-MM-DD'),
     } = query;
 
-    if (moment(start_date).isSameOrAfter(moment(end_date)))
+    if (moment(start_date).isAfter(moment(end_date)))
       throw new ApiError('invalid-period', 'Intervalo de datas inválido', 400);
 
     const info = await this.getAccountPositionService.getPosition(id, {

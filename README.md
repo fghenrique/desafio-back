@@ -16,12 +16,12 @@ Para servir a aplicação em modo de desenvolvimento, siga estas etapas:
 
 1. Certifique-se de ter um banco de dados PostgreSQL em execução. Você precisará preencher as seguintes variáveis de ambiente em um arquivo `.env`:
 
-   - `DB_HOST`: O endereço do banco de dados PostgreSQL.
+   - `DB_HOST`: O endereço do banco de dados PostgreSQL, por padrão o docker compose espera que seja `postgres`, altere caso vá usar em desenvolvimento.
    - `DB_PORT`: A porta do banco de dados PostgreSQL.
    - `DB_USERNAME`: O nome de usuário do banco de dados PostgreSQL.
    - `DB_PASSWORD`: A senha do banco de dados PostgreSQL.
    - `DB_DATABASE`: O nome do banco de dados PostgreSQL a ser utilizado.
-   - `REDIS_URL`: O endereço da instância do Redis
+   - `REDIS_URL`: O endereço da instância do Redis, por padrão o docker compose espera que seja `redis`, altere caso vá usar em desenvolvimento
    - `REDIS_PORT`: Porta da instância do Redis
    - `MODE`: Define o modo de execução como, por padrão defina como `dev` para melhor funcionamento.
    - `JWT_SECRET`: Uma chave secreta para assinar e verificar tokens JWT.
@@ -48,7 +48,7 @@ Para servir a aplicação em modo de produção usando Docker Compose, siga esta
 2. Execute o seguinte comando para iniciar a aplicação em modo de produção:
 
 ```
-docker compose up -d
+docker compose up -d --build
 ```
 
 ### Atualização e Rebuild

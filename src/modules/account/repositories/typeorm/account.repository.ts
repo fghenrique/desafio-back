@@ -7,6 +7,7 @@ import { QueryTimeIntervalDto } from '@/common/dtos/query-time-interval.dto';
 import { AccountRepository } from '../account.repository';
 import { Account } from '../../account.entity';
 import { FindOneAccountOptions } from '../../interfaces/find-one-account-options.interface';
+import moment from '@/common/libs/moment';
 
 @Injectable()
 export class TypeormAccountRepository implements AccountRepository {
@@ -47,7 +48,8 @@ export class TypeormAccountRepository implements AccountRepository {
     qb.andWhere('accounts.id = :accountId', { accountId });
     qb.andWhere('transactions.created_at BETWEEN :start_date AND :end_date', {
       start_date,
-      end_date,
+      // on SQL a date like YYYY-MM-DD means YYYY-MM-DD 00:00:00 so we force it to be 23:59:59
+      end_date: moment(end_date).format('YYYY-MM-DDT23:59:59.999Z'),
     });
 
     const account = await qb.getOne();
@@ -69,7 +71,7 @@ export class TypeormAccountRepository implements AccountRepository {
 
     qb.andWhere('transactions.created_at BETWEEN :start_date AND :end_date', {
       start_date,
-      end_date,
+      end_date: moment(end_date).format('YYYY-MM-DDT23:59:59.999Z'),
     });
 
     qb.andWhere('accounts.id = :accountId', { accountId });
@@ -80,7 +82,12 @@ export class TypeormAccountRepository implements AccountRepository {
     qb.addSelect('AVG(transactions.btc_price_at_time)', 'average_buy_price');
 
     const res = await qb.getRawOne();
-    return res;
+
+    return {
+      brl_amount_bought: res.brl_amount_bought ?? 0,
+      btc_amount_bought: res.btc_amount_bought ?? 0,
+      average_buy_price: res.average_buy_price ?? 0,
+    };
   }
 
   async getAllSellInfo(
@@ -98,7 +105,7 @@ export class TypeormAccountRepository implements AccountRepository {
 
     qb.andWhere('transactions.created_at BETWEEN :start_date AND :end_date', {
       start_date,
-      end_date,
+      end_date: moment(end_date).format('YYYY-MM-DDT23:59:59.999Z'),
     });
 
     qb.andWhere('accounts.id = :accountId', { accountId });
@@ -109,7 +116,12 @@ export class TypeormAccountRepository implements AccountRepository {
     qb.addSelect('AVG(transactions.btc_price_at_time)', 'average_sell_price');
 
     const res = await qb.getRawOne();
-    return res;
+
+    return {
+      btc_amount_sold: res.brl_amount_sold ?? 0,
+      brl_amount_sold: res.btc_amount_sold ?? 0,
+      average_sell_price: res.average_buy_price ?? 0,
+    };
   }
 
   async updateAccount(id: string, data: Account) {

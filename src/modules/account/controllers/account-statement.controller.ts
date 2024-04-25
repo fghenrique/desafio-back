@@ -25,7 +25,7 @@ export class AccountStatementController {
       end_date = moment().format('YYYY-MM-DD'),
     } = query;
 
-    if (moment(start_date).isSameOrAfter(moment(end_date)))
+    if (moment(start_date).isAfter(moment(end_date)))
       throw new ApiError('invalid-period', 'Intervalo de datas inválido', 400);
 
     const transactions =
@@ -33,6 +33,7 @@ export class AccountStatementController {
         start_date,
         end_date,
       });
+
     return { ok: true, transactions };
   }
 }
